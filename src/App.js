@@ -155,7 +155,7 @@ export default function App() {
     "#98D8C8",
   ];
 
-  const contents = ["🎈", "🎉", "🎊", "🎁", "./tam.jpg", "tam.jpg"]; // Giảm số lượng emoji, thêm image từ public/images
+  const contents = ["🎈", "🎉", "🎊", "🎁", "./tam.jpg", "tam2.jpg"]; // Giảm số lượng emoji, thêm image từ public/images
   const points = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   let audio = new Audio(
     "https://soundbible.com/mp3/Balloon%20Popping-SoundBible.com-1247261379.mp3"
