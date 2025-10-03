@@ -130,7 +130,7 @@ export default function App() {
   const supportsTouch = "ontouchstart" in window || navigator.msMaxTouchPoints;
 
   // Giới hạn số bóng bay tối đa để tránh lag
-  const MAX_BALLOONS = 30;
+  const MAX_BALLOONS = 15;
 
   const colors = [
     "#FF6B6B",
