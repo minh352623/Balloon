@@ -110,7 +110,7 @@ const Balloon = ({ id, color, onPop, content }) => {
       {content?.includes(".") ? (
         <img
           src={content}
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
           alt="balloon"
         />
       ) : (
