@@ -163,7 +163,7 @@ export default function App() {
   const addMoreBalloons = () => {
     // Kiểm tra giới hạn số bóng bay
     if (balloons.length >= MAX_BALLOONS) {
-      alert(`Tối đa ${MAX_BALLOONS} bóng bay để tránh lag!`);
+      // alert(`Tối đa ${MAX_BALLOONS} bóng bay để tránh lag!`);
       return;
     }
 
