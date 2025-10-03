@@ -107,7 +107,15 @@ const Balloon = ({ id, color, onPop, content }) => {
       }}
       onClick={handleClick}
     >
-      {content?.includes(".") ? <img src={content} alt="balloon" /> : content}
+      {content?.includes(".") ? (
+        <img
+          src={content}
+          style={{ width: "100%", height: "100%" }}
+          alt="balloon"
+        />
+      ) : (
+        content
+      )}
       {isExploding && (
         <div className="explosion">
           <div className="particle"></div>
@@ -142,7 +150,7 @@ export default function App() {
     "#98D8C8",
   ];
 
-  const contents = ["🎈", "🎉", "🎊", "🎁", "./tam.jpg"]; // Giảm số lượng emoji, thêm image từ public/images
+  const contents = ["🎈", "🎉", "🎊", "🎁", "./tam.jpg", "tam.jpg"]; // Giảm số lượng emoji, thêm image từ public/images
   const points = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   let audio = new Audio(
     "https://soundbible.com/mp3/Balloon%20Popping-SoundBible.com-1247261379.mp3"
