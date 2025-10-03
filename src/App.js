@@ -195,7 +195,10 @@ export default function App() {
   };
 
   return (
-    <div className="App">
+    <div
+      className="App"
+      style={{ width: "100vw", height: "100vh", overflow: "hidden" }}
+    >
       <h1>Bóng Bay Floating 🎈</h1>
       <div className="controls">
         <button onClick={addMoreBalloons}>Thêm bóng bay mới</button>
