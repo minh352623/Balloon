@@ -24,7 +24,7 @@ const Balloon = ({ id, color, onPop, content }) => {
 
     // Sử dụng requestAnimationFrame thay vì setInterval để tối ưu performance
     const animate = (currentTime) => {
-      if (currentTime - lastTime >= 12) {
+      if (currentTime - lastTime >= 8) {
         // ~60fps
         setPosition((prev) => {
           const newY = prev.y - 2; // Giảm tốc độ bay lên
