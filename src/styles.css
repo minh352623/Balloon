@@ -167,7 +167,7 @@ button:hover {
   animation-delay: 1s;
 }
 
-/* Tối ưu cho mobile để giảm lag */
+/* Tối ưu cho mobile và iPhone để giảm lag */
 @media (max-width: 768px) {
   .balloon:nth-child(odd),
   .balloon:nth-child(even) {
@@ -176,14 +176,35 @@ button:hover {
   
   .balloon {
     /* Giảm hiệu ứng phức tạp cho mobile */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.4) 0%, 
+      rgba(255, 255, 255, 0.3) 0%, 
       rgba(255, 255, 255, 0.1) 100%);
+    will-change: auto; /* Tắt will-change trên mobile */
   }
   
   .balloon::before {
     display: none; /* Tắt hiệu ứng phản chiếu */
+  }
+  
+  /* Tối ưu cho iPhone */
+  .compact-points-display {
+    animation: none; /* Tắt animation trên mobile */
+  }
+  
+  .simple-floating-points {
+    animation: none; /* Tắt animation floating points */
+  }
+  
+  .simple-points-text {
+    background: rgba(0, 0, 0, 0.8);
+    text-shadow: none; /* Tắt text-shadow */
+  }
+  
+  .compact-points-text {
+    background: rgba(0, 0, 0, 0.8);
+    text-shadow: none; /* Tắt text-shadow */
+    border: none; /* Tắt border */
   }
 }
 

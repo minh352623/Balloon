@@ -75,12 +75,15 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
     let animationId;
     let lastTime = 0;
 
+    // Detect iPhone/iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const frameRate = isIOS ? 50 : 33; // 20fps cho iOS, 30fps cho Android
+
     // Tối ưu cho mobile - giảm frame rate và tăng tốc độ
     const animate = (currentTime) => {
-      if (currentTime - lastTime >= 33) {
-        // ~30fps thay vì 60fps để giảm lag
+      if (currentTime - lastTime >= frameRate) {
         setPosition((prev) => {
-          const newY = prev.y - 3; // Tăng tốc độ bay lên
+          const newY = prev.y - (isIOS ? 4 : 3); // Tăng tốc độ cho iOS
 
           // Đánh dấu cần xóa bóng bay khi bay ra khỏi màn hình
           if (newY < -150) {
@@ -88,9 +91,17 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
             return prev;
           }
 
+          // Tắt chuyển động ngang cho iOS để giảm lag
+          if (isIOS) {
+            return {
+              x: position.x,
+              y: newY,
+            };
+          }
+
           // Giảm chuyển động ngang để tối ưu performance
-          const waveX = Math.sin(currentTime * 0.001) * 5; // Biên độ nhỏ hơn
-          const newX = position.x + waveX * 0.05; // Chuyển động rất nhẹ
+          const waveX = Math.sin(currentTime * 0.001) * 3; // Biên độ nhỏ hơn cho iOS
+          const newX = position.x + waveX * 0.03; // Chuyển động rất nhẹ
 
           return {
             x: newX,
@@ -218,7 +229,8 @@ export default function App() {
   const supportsTouch = "ontouchstart" in window || navigator.msMaxTouchPoints;
 
   // Giới hạn số bóng bay tối đa để tránh lag - giảm cho mobile
-  const MAX_BALLOONS = 15;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const MAX_BALLOONS = isIOS ? 10 : 15; // Giảm xuống 5 cho iPhone
 
   const colors = [
     "#FF6B6B",
