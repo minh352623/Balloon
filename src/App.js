@@ -55,7 +55,7 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
   const [isExploding, setIsExploding] = useState(false);
   const [shouldRemove, setShouldRemove] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
-  const [position, setPosition] = useState({
+  const [transform, setTransform] = useState({
     x: Math.random() * (window.innerWidth - 100),
     y: window.innerHeight + 50,
   });
@@ -67,7 +67,7 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
       // Delay xóa bóng bay để animation fade out hoàn thành
       setTimeout(() => {
         onPop(id);
-      }, 500); // 500ms cho animation fade out
+      }, 300); // Giảm thời gian để giảm lag
     }
   }, [shouldRemove, id, onPop]);
 
@@ -79,14 +79,14 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const frameRate = isIOS ? 50 : 33; // 20fps cho iOS, 30fps cho Android
 
-    // Tối ưu cho mobile - giảm frame rate và tăng tốc độ
+    // Tối ưu cho mobile - sử dụng transform thay vì position
     const animate = (currentTime) => {
       if (currentTime - lastTime >= frameRate) {
-        setPosition((prev) => {
+        setTransform((prev) => {
           const newY = prev.y - (isIOS ? 4 : 3); // Tăng tốc độ cho iOS
 
-          // Đánh dấu cần xóa bóng bay khi bay ra khỏi màn hình
-          if (newY < -150) {
+          // Đánh dấu cần xóa bóng bay khi bay ra khỏi màn hình - sớm hơn để tránh giựt
+          if (newY < -100) {
             setShouldRemove(true);
             return prev;
           }
@@ -94,14 +94,14 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
           // Tắt chuyển động ngang cho iOS để giảm lag
           if (isIOS) {
             return {
-              x: position.x,
+              x: prev.x, // Sử dụng prev.x thay vì transform.x
               y: newY,
             };
           }
 
           // Giảm chuyển động ngang để tối ưu performance
-          const waveX = Math.sin(currentTime * 0.001) * 3; // Biên độ nhỏ hơn cho iOS
-          const newX = position.x + waveX * 0.03; // Chuyển động rất nhẹ
+          const waveX = Math.sin(currentTime * 0.001) * 2; // Biên độ nhỏ hơn
+          const newX = prev.x + waveX * 0.02; // Chuyển động rất nhẹ
 
           return {
             x: newX,
@@ -165,22 +165,20 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
 
   return (
     <div
-      className={`balloon ${isExploding ? "exploding" : ""} ${
-        isFadingOut ? "fading-out" : ""
-      }`}
+      className={`balloon ${isExploding ? "exploding" : ""}`}
       style={{
-        left: position.x,
-        top: position.y,
         backgroundColor: color,
         position: "fixed",
         zIndex: 1000,
+        transform: `translate(${transform.x}px, ${transform.y}px) ${
+          isExploding ? "scale(1.2)" : "scale(1)"
+        }`,
         transition: isFadingOut
-          ? "opacity 0.5s ease-out, transform 0.5s ease-out"
+          ? "opacity 0.3s ease-out"
+          : isExploding
+          ? "transform 0.1s ease-out"
           : "none",
         opacity: isFadingOut ? 0 : 1,
-        transform: isFadingOut
-          ? "scale(0.8) translateY(-20px)"
-          : "scale(1) translateY(0)",
       }}
       onClick={handleClick}
     >
@@ -393,9 +391,9 @@ export default function App() {
         }));
 
         // Tạo hiệu ứng điểm số bay lên nếu có điểm mới
-        if (ctx.data.tapPoint && ctx.data.tapPoint > 0) {
-          createFloatingPoints(ctx.data.tapPoint);
-        }
+        // if (ctx.data.tapPoint && ctx.data.tapPoint > 0) {
+        //   createFloatingPoints(ctx.data.tapPoint);
+        // }
       })
       .on("subscribing", (ctx) => {
         console.log("Subscribing:", ctx);
