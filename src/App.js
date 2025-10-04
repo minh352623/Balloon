@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import { Centrifuge } from "centrifuge";
 import { tapBalloon, initUser, getToken, getPoints } from "./api";
 
-// Component hiển thị điểm số với animation
+// Component hiển thị điểm số với animation - đơn giản hóa
 const PointsDisplay = ({ points, isVisible, onAnimationEnd }) => {
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
         onAnimationEnd();
-      }, 2000);
+      }, 1000); // Giảm thời gian hiển thị
       return () => clearTimeout(timer);
     }
   }, [isVisible, onAnimationEnd]);
@@ -18,23 +18,22 @@ const PointsDisplay = ({ points, isVisible, onAnimationEnd }) => {
 
   return (
     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
-      <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-8 py-4 rounded-full shadow-2xl animate-bounce">
+      <div className="simple-points-display">
         <div className="text-center">
-          <div className="text-4xl font-bold">+{points}</div>
-          <div className="text-sm font-medium">Điểm!</div>
+          <div className="text-3xl font-bold">+{points}</div>
         </div>
       </div>
     </div>
   );
 };
 
-// Component hiệu ứng điểm số bay lên
+// Component hiệu ứng điểm số bay lên - đơn giản hóa
 const FloatingPoints = ({ points, isVisible, onAnimationEnd, position }) => {
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
         onAnimationEnd();
-      }, 3000);
+      }, 1500); // Giảm thời gian hiển thị
       return () => clearTimeout(timer);
     }
   }, [isVisible, onAnimationEnd]);
@@ -43,18 +42,13 @@ const FloatingPoints = ({ points, isVisible, onAnimationEnd, position }) => {
 
   return (
     <div
-      className="floating-points fixed z-50 pointer-events-none"
+      className="simple-floating-points fixed z-50 pointer-events-none"
       style={{
         left: position?.x || window.innerWidth / 2,
         top: position?.y || window.innerHeight / 2,
       }}
     >
-      <div className="floating-points-container">
-        <div className="text-center">
-          <div className="floating-points-number">+{points}</div>
-          <div className="floating-points-label">Điểm!</div>
-        </div>
-      </div>
+      <div className="simple-points-text">+{points}</div>
     </div>
   );
 };
@@ -228,7 +222,7 @@ export default function App() {
   const supportsTouch = "ontouchstart" in window || navigator.msMaxTouchPoints;
 
   // Giới hạn số bóng bay tối đa để tránh lag - giảm cho mobile
-  const MAX_BALLOONS = 20;
+  const MAX_BALLOONS = 15;
 
   const colors = [
     "#FF6B6B",

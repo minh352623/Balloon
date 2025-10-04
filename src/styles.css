@@ -80,11 +80,13 @@ button:hover {
   justify-content: center;
   font-size: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: none; /* Tắt transition để giảm lag */
   position: relative;
   will-change: transform; /* Tối ưu GPU */
   transform: translateZ(0); /* Force hardware acceleration */
   transform-origin: center;
+  backface-visibility: hidden; /* Tối ưu rendering */
+  -webkit-backface-visibility: hidden;
   
   /* Hiệu ứng bóng bay 3D - tối ưu hóa */
   background: linear-gradient(135deg, 
@@ -154,20 +156,35 @@ button:hover {
   }
 }
 
-/* Hiệu ứng đặc biệt cho các emoji - tối ưu hóa */
+/* Hiệu ứng đặc biệt cho các emoji - tối ưu cho mobile */
 .balloon:nth-child(odd) {
-  animation: float 2s ease-in-out infinite;
+  animation: float 3s ease-in-out infinite;
   animation-delay: 0s;
 }
 
 .balloon:nth-child(even) {
-  animation: float 2.2s ease-in-out infinite;
-  animation-delay: 0.5s;
+  animation: float 3.5s ease-in-out infinite;
+  animation-delay: 1s;
 }
 
-.balloon:nth-child(3n) {
-  animation: float 1.8s ease-in-out infinite;
-  animation-delay: 1s;
+/* Tối ưu cho mobile để giảm lag */
+@media (max-width: 768px) {
+  .balloon:nth-child(odd),
+  .balloon:nth-child(even) {
+    animation: none;
+  }
+  
+  .balloon {
+    /* Giảm hiệu ứng phức tạp cho mobile */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.4) 0%, 
+      rgba(255, 255, 255, 0.1) 100%);
+  }
+  
+  .balloon::before {
+    display: none; /* Tắt hiệu ứng phản chiếu */
+  }
 }
 
 @keyframes sparkle {
@@ -215,99 +232,60 @@ button:hover {
   }
 }
 
-/* Hiệu ứng điểm số bay lên */
-.floating-points {
-  animation: floatUp 3s ease-out forwards;
+/* Hiệu ứng điểm số bay lên - đơn giản hóa */
+.simple-floating-points {
+  animation: simpleFloatUp 1.5s ease-out forwards;
 }
 
-.floating-points-container {
-  background: linear-gradient(135deg, #00ff88, #00d4ff, #ff6b6b);
-  background-size: 200% 200%;
-  animation: gradientShift 2s ease infinite;
-  padding: 12px 20px;
-  border-radius: 25px;
-  box-shadow: 
-    0 8px 32px rgba(0, 255, 136, 0.4),
-    0 0 0 3px rgba(255, 255, 255, 0.2),
-    inset 0 2px 10px rgba(255, 255, 255, 0.3);
-  position: relative;
-  overflow: hidden;
+.simple-points-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #00ff88;
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+  background: rgba(0, 0, 0, 0.7);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 2px solid #00ff88;
 }
 
-.floating-points-container::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: shimmer 2s infinite;
-}
-
-.floating-points-number {
-  font-size: 28px;
-  font-weight: 900;
-  color: #ffffff;
-  text-shadow: 
-    0 0 10px rgba(255, 255, 255, 0.8),
-    0 0 20px rgba(0, 255, 136, 0.6),
-    0 0 30px rgba(0, 212, 255, 0.4);
-  letter-spacing: 1px;
-  position: relative;
-  z-index: 2;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-.floating-points-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-top: 2px;
-  position: relative;
-  z-index: 2;
-}
-
-@keyframes floatUp {
+@keyframes simpleFloatUp {
   0% {
     opacity: 1;
-    transform: translateY(0) scale(1) rotate(0deg);
-  }
-  25% {
-    opacity: 1;
-    transform: translateY(-30px) scale(1.2) rotate(2deg);
+    transform: translateY(0) scale(1);
   }
   50% {
     opacity: 1;
-    transform: translateY(-60px) scale(1.1) rotate(-1deg);
-  }
-  75% {
-    opacity: 0.7;
-    transform: translateY(-90px) scale(0.9) rotate(1deg);
+    transform: translateY(-30px) scale(1.1);
   }
   100% {
     opacity: 0;
-    transform: translateY(-120px) scale(0.7) rotate(0deg);
+    transform: translateY(-60px) scale(0.8);
   }
 }
 
-@keyframes shimmer {
+/* Component hiển thị điểm số đơn giản */
+.simple-points-display {
+  background: rgba(0, 0, 0, 0.8);
+  color: #00ff88;
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: 2px solid #00ff88;
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+  animation: simpleBounce 1s ease-out;
+}
+
+@keyframes simpleBounce {
   0% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-  }
-  100% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
+    transform: scale(0.5);
+    opacity: 0;
   }
   50% {
-    transform: scale(1.05);
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 
@@ -432,3 +410,4 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
+
