@@ -72,19 +72,19 @@ button:hover {
 }
 
 .balloon {
-  width: 70px;
+  width: 80px;
   height: 90px;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 35px;
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  animation: float 1.5s ease-in-out infinite;
   will-change: transform; /* Tối ưu GPU */
   transform: translateZ(0); /* Force hardware acceleration */
+  transform-origin: center;
   
   /* Hiệu ứng bóng bay 3D - tối ưu hóa */
   background: linear-gradient(135deg, 
@@ -141,26 +141,33 @@ button:hover {
 
 @keyframes float {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px) rotate(0deg) scale(1);
   }
   25% {
-    transform: translateY(-5px) rotate(1deg);
+    transform: translateY(-2px) rotate(0.3deg) scale(1.01);
   }
   50% {
-    transform: translateY(-10px) rotate(0deg);
+    transform: translateY(-4px) rotate(0deg) scale(1.02);
   }
   75% {
-    transform: translateY(-5px) rotate(-1deg);
+    transform: translateY(-2px) rotate(-0.3deg) scale(1.01);
   }
 }
 
 /* Hiệu ứng đặc biệt cho các emoji - tối ưu hóa */
 .balloon:nth-child(odd) {
-  animation: float 1.5s ease-in-out infinite;
+  animation: float 2s ease-in-out infinite;
+  animation-delay: 0s;
 }
 
 .balloon:nth-child(even) {
+  animation: float 2.2s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.balloon:nth-child(3n) {
   animation: float 1.8s ease-in-out infinite;
+  animation-delay: 1s;
 }
 
 @keyframes sparkle {
@@ -178,6 +185,10 @@ button:hover {
   animation: explode 0.5s ease-out forwards;
 }
 
+.balloon.fading-out {
+  animation: fadeOut 0.5s ease-out forwards;
+}
+
 @keyframes explode {
   0% {
     transform: scale(1);
@@ -190,6 +201,113 @@ button:hover {
   100% {
     transform: scale(0);
     opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-20px);
+  }
+}
+
+/* Hiệu ứng điểm số bay lên */
+.floating-points {
+  animation: floatUp 3s ease-out forwards;
+}
+
+.floating-points-container {
+  background: linear-gradient(135deg, #00ff88, #00d4ff, #ff6b6b);
+  background-size: 200% 200%;
+  animation: gradientShift 2s ease infinite;
+  padding: 12px 20px;
+  border-radius: 25px;
+  box-shadow: 
+    0 8px 32px rgba(0, 255, 136, 0.4),
+    0 0 0 3px rgba(255, 255, 255, 0.2),
+    inset 0 2px 10px rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-points-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.floating-points-number {
+  font-size: 28px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(0, 255, 136, 0.6),
+    0 0 30px rgba(0, 212, 255, 0.4);
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 2;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.floating-points-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 2px;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(-30px) scale(1.2) rotate(2deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-60px) scale(1.1) rotate(-1deg);
+  }
+  75% {
+    opacity: 0.7;
+    transform: translateY(-90px) scale(0.9) rotate(1deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-120px) scale(0.7) rotate(0deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
   }
 }
 
