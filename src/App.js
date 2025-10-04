@@ -373,7 +373,7 @@ export default function App() {
               if (item.type == "survey")
                 addMoreBalloons(item.icon, item.key, item.type);
               else addMoreBalloons(item.icon, item.key, item.type);
-            }, index * 1000); // Delay 200ms giữa mỗi bóng bay
+            }, index * 1500); // Delay 200ms giữa mỗi bóng bay
           });
         }
       })
