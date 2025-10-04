@@ -181,6 +181,9 @@ button:hover::before {
       rgba(255, 255, 255, 0.3) 0%, 
       rgba(255, 255, 255, 0.1) 100%);
     will-change: auto; /* Tắt will-change trên mobile */
+    transform: none; /* Tắt transform mặc định */
+    backface-visibility: visible; /* Tắt backface-visibility */
+    contain: none; /* Tắt contain */
   }
   
   .balloon::before {
