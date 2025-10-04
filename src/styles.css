@@ -63,13 +63,13 @@ button:hover::before {
   left: 100%;
 }
 
-button:hover {
+/* button:hover {
   background: linear-gradient(135deg, #ff5252, #ff7979);
   transform: translateY(-3px) scale(1.05);
   box-shadow: 
     0 12px 35px rgba(255, 107, 107, 0.5),
     inset 0 2px 15px rgba(255, 255, 255, 0.4);
-}
+} */
 
 .balloon {
   width: 80px;
@@ -133,13 +133,13 @@ button:hover {
   }
 }
 
-.balloon:hover {
+/* .balloon:hover {
   transform: scale(1.15) rotate(5deg);
   box-shadow: 
     0 12px 35px rgba(0, 0, 0, 0.4),
     inset 0 2px 15px rgba(255, 255, 255, 0.6),
     inset 0 -2px 15px rgba(0, 0, 0, 0.15);
-}
+} */
 
 @keyframes float {
   0%, 100% {
