@@ -206,6 +206,10 @@ button:hover {
     text-shadow: none; /* Tắt text-shadow */
     border: none; /* Tắt border */
   }
+
+  .balloon.exploding {
+    animation: none; /* Tắt animation exploding cho mobile */
+  }
 }
 
 @keyframes sparkle {
