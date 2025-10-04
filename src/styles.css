@@ -175,19 +175,22 @@ button:hover::before {
   }
   
   .balloon {
-    /* Giảm hiệu ứng phức tạp cho mobile */
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.3) 0%, 
-      rgba(255, 255, 255, 0.1) 100%);
-    will-change: auto; /* Tắt will-change trên mobile */
-    transform: none; /* Tắt transform mặc định */
-    backface-visibility: visible; /* Tắt backface-visibility */
-    contain: none; /* Tắt contain */
+    /* Tối ưu cực đại cho iPhone */
+    will-change: auto;
+    transform: none;
+    backface-visibility: visible;
+    contain: none;
+    /* Tắt mọi hiệu ứng phức tạp */
+    box-shadow: none;
+    background: solid color; /* Thay vì gradient */
   }
   
   .balloon::before {
     display: none; /* Tắt hiệu ứng phản chiếu */
+  }
+  
+  .balloon.exploding {
+    animation: none;
   }
   
   /* Tối ưu cho iPhone */
