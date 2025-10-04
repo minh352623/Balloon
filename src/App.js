@@ -168,7 +168,7 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
     // Sau 0.5 giây thì xóa bóng bay
     setTimeout(() => {
       setIsPopped(true);
-      onPop(id, network, bubbleType, true);
+      onPop(id, network, bubbleType, false);
     }, 500);
   };
 
