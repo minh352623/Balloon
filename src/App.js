@@ -84,16 +84,13 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
   useEffect(() => {
     let animationId;
     let lastTime = 0;
-    let frameCount = 0;
 
-    // Sử dụng requestAnimationFrame để tạo chuyển động mượt mà
+    // Tối ưu cho mobile - giảm frame rate và tăng tốc độ
     const animate = (currentTime) => {
-      if (currentTime - lastTime >= 16) {
-        // ~60fps
-        frameCount++;
-
+      if (currentTime - lastTime >= 33) {
+        // ~30fps thay vì 60fps để giảm lag
         setPosition((prev) => {
-          const newY = prev.y - 1.5; // Tốc độ bay lên chậm hơn
+          const newY = prev.y - 3; // Tăng tốc độ bay lên
 
           // Đánh dấu cần xóa bóng bay khi bay ra khỏi màn hình
           if (newY < -150) {
@@ -101,9 +98,9 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
             return prev;
           }
 
-          // Tạo chuyển động ngang mượt mà bằng sine wave
-          const waveX = Math.sin(frameCount * 0.05) * 10; // Biên độ nhỏ hơn
-          const newX = position.x + waveX * 0.1; // Chuyển động nhẹ nhàng
+          // Giảm chuyển động ngang để tối ưu performance
+          const waveX = Math.sin(currentTime * 0.001) * 5; // Biên độ nhỏ hơn
+          const newX = position.x + waveX * 0.05; // Chuyển động rất nhẹ
 
           return {
             x: newX,
@@ -230,8 +227,8 @@ export default function App() {
   const [floatingPoints, setFloatingPoints] = useState([]);
   const supportsTouch = "ontouchstart" in window || navigator.msMaxTouchPoints;
 
-  // Giới hạn số bóng bay tối đa để tránh lag
-  const MAX_BALLOONS = 15;
+  // Giới hạn số bóng bay tối đa để tránh lag - giảm cho mobile
+  const MAX_BALLOONS = 20;
 
   const colors = [
     "#FF6B6B",
@@ -249,26 +246,28 @@ export default function App() {
     "https://soundbible.com/mp3/Balloon%20Popping-SoundBible.com-1247261379.mp3"
   );
   const addMoreBalloons = (icon, network, type) => {
-    // Kiểm tra giới hạn số bóng bay
-    if (balloons.length >= MAX_BALLOONS) {
-      // alert(`Tối đa ${MAX_BALLOONS} bóng bay để tránh lag!`);
-      return;
-    }
+    setBalloons((prev) => {
+      // Kiểm tra giới hạn số bóng bay với state hiện tại
+      console.log("🚀 ~ addMoreBalloons ~ prev.length:", prev.length);
+      if (prev.length >= MAX_BALLOONS) {
+        return prev; // Return state hiện tại nếu đã đủ
+      }
 
-    const newBalloons = [];
-    const balloonsToAdd = Math.min(1, MAX_BALLOONS - balloons.length);
+      const newBalloons = [];
+      const balloonsToAdd = Math.min(1, MAX_BALLOONS - prev.length);
 
-    for (let i = 0; i < balloonsToAdd; i++) {
-      newBalloons.push({
-        id: crypto.randomUUID(),
-        color: colors[Math.floor(Math.random() * colors.length)],
-        network: network,
-        bubbleType: type,
-        icon: icon,
-      });
-    }
-    setBalloons((prev) => [...prev, ...newBalloons]);
-    setNextId((prev) => prev + balloonsToAdd);
+      for (let i = 0; i < balloonsToAdd; i++) {
+        newBalloons.push({
+          id: Date.now() + Math.random(),
+          color: colors[Math.floor(Math.random() * colors.length)],
+          network: network,
+          bubbleType: type,
+          icon: icon,
+        });
+      }
+
+      return [...prev, ...newBalloons];
+    });
   };
 
   const handleBalloonPop = (id, network, bubbleType, isSound = false) => {
@@ -363,7 +362,7 @@ export default function App() {
               if (item.type == "survey")
                 addMoreBalloons(item.icon, item.key, item.type);
               else addMoreBalloons(item.icon, item.key, item.type);
-            }, index * 500); // Delay 200ms giữa mỗi bóng bay
+            }, index * 800); // Delay 200ms giữa mỗi bóng bay
           });
         }
       })
