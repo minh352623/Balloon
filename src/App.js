@@ -55,10 +55,14 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
   const [isExploding, setIsExploding] = useState(false);
   const [shouldRemove, setShouldRemove] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
-  const [transform, setTransform] = useState({
+  // Thay đổi state từ transform về position
+  const [position, setPosition] = useState({
     x: Math.random() * (window.innerWidth - 100),
     y: window.innerHeight + 50,
   });
+
+  // Detect iPhone/iOS - di chuyển ra ngoài useEffect
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   // Xử lý việc xóa bóng bay khi cần với animation mượt
   useEffect(() => {
@@ -71,37 +75,37 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
     }
   }, [shouldRemove, id, onPop]);
 
+  // Thay đổi animation logic
   useEffect(() => {
     let animationId;
     let lastTime = 0;
 
     // Detect iPhone/iOS
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const frameRate = isIOS ? 50 : 33; // 20fps cho iOS, 30fps cho Android
+    const frameRate = isIOS ? 66 : 33; // 15fps cho iOS, 30fps cho Android
 
-    // Tối ưu cho mobile - sử dụng transform thay vì position
+    // Tối ưu cho mobile - sử dụng position thay vì transform
     const animate = (currentTime) => {
       if (currentTime - lastTime >= frameRate) {
-        setTransform((prev) => {
-          const newY = prev.y - (isIOS ? 4 : 3); // Tăng tốc độ cho iOS
+        setPosition((prev) => {
+          const newY = prev.y - (isIOS ? 8 : 3); // Tăng tốc độ cho iOS
 
-          // Đánh dấu cần xóa bóng bay khi bay ra khỏi màn hình - sớm hơn để tránh giựt
+          // Đánh dấu cần xóa bóng bay khi bay ra khỏi màn hình
           if (newY < -100) {
             setShouldRemove(true);
             return prev;
           }
 
-          // Tắt chuyển động ngang cho iOS để giảm lag
+          // Tắt hoàn toàn chuyển động ngang cho iOS
           if (isIOS) {
             return {
-              x: prev.x, // Sử dụng prev.x thay vì transform.x
+              x: prev.x,
               y: newY,
             };
           }
 
-          // Giảm chuyển động ngang để tối ưu performance
-          const waveX = Math.sin(currentTime * 0.001) * 2; // Biên độ nhỏ hơn
-          const newX = prev.x + waveX * 0.02; // Chuyển động rất nhẹ
+          // Giảm chuyển động ngang cho Android
+          const waveX = Math.sin(currentTime * 0.001) * 1;
+          const newX = prev.x + waveX * 0.01;
 
           return {
             x: newX,
@@ -120,7 +124,7 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
         cancelAnimationFrame(animationId);
       }
     };
-  }, []);
+  }, [isIOS]);
 
   const handleClick = () => {
     setIsExploding(true);
@@ -170,15 +174,15 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
         backgroundColor: color,
         position: "fixed",
         zIndex: 1000,
-        transform: `translate(${transform.x}px, ${transform.y}px) ${
-          isExploding ? "scale(1.2)" : "scale(1)"
-        }`,
+        left: position.x,
+        top: position.y,
         transition: isFadingOut
           ? "opacity 0.3s ease-out"
-          : isExploding
-          ? "transform 0.1s ease-out"
+          : isExploding && !isIOS
+          ? "transform 0.2s ease-out"
           : "none",
         opacity: isFadingOut ? 0 : 1,
+        transform: isExploding && !isIOS ? "scale(1.1)" : "scale(1)",
       }}
       onClick={handleClick}
     >
