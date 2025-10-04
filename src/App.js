@@ -321,7 +321,7 @@ export default function App() {
     setBalloons([]);
   };
 
-  useEffect(async () => {
+  const initSocket = async () => {
     const centrifuge = new Centrifuge(
       "wss://xp-centrifugal-sb.blocktrend.xyz/connection/websocket"
     );
@@ -411,11 +411,11 @@ export default function App() {
       .subscribe();
 
     centrifuge.connect();
-  }, []);
+  };
 
   useEffect(async () => {
     const deviceId = window.prompt("Device of you is:");
-    initUser(deviceId);
+    await initUser(deviceId);
     const points = await getPoints();
     console.log("🚀 ~ App ~ points:", points);
     let totalPoints = 0;
@@ -426,6 +426,7 @@ export default function App() {
       ...prev,
       totalPoints: totalPoints,
     }));
+    await initSocket();
   }, []);
 
   return (
