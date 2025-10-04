@@ -93,7 +93,7 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
 
         setPosition((prev) => {
           // Đơn giản hóa - chỉ di chuyển lên với tốc độ cố định
-          const speed = isIOS ? 2 : 1.5; // Tốc độ di chuyển
+          const speed = 2; // Tốc độ di chuyển
           const newY = prev.y - speed;
 
           // Đánh dấu cần xóa bóng bay khi bay ra khỏi màn hình
