@@ -457,11 +457,6 @@ export default function App() {
                 </span>
               </div>
             </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span className="text-sm">
-                Bóng bay: {balloons.length}/{MAX_BALLOONS}
-              </span>
-            </div>
           </div>
         </div>
       </div>
