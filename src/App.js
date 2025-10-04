@@ -75,19 +75,26 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
     }
   }, [shouldRemove, id, onPop]);
 
-  // Thay đổi animation logic
+  // Sửa animation logic
   useEffect(() => {
     let animationId;
     let lastTime = 0;
+    let startTime = Date.now();
+    let initialX = position.x;
+    let initialY = position.y;
 
-    // Detect iPhone/iOS
-    const frameRate = isIOS ? 66 : 33; // 15fps cho iOS, 30fps cho Android
+    // Tối ưu frame rate cho iOS
+    const frameRate = isIOS ? 16 : 33; // 60fps cho iOS, 30fps cho Android
 
-    // Tối ưu cho mobile - sử dụng position thay vì transform
+    // Tối ưu cho mobile - sử dụng position với easing
     const animate = (currentTime) => {
       if (currentTime - lastTime >= frameRate) {
+        const elapsed = currentTime - startTime;
+
         setPosition((prev) => {
-          const newY = prev.y - (isIOS ? 8 : 3); // Tăng tốc độ cho iOS
+          // Đơn giản hóa - chỉ di chuyển lên với tốc độ cố định
+          const speed = isIOS ? 2 : 1.5; // Tốc độ di chuyển
+          const newY = prev.y - speed;
 
           // Đánh dấu cần xóa bóng bay khi bay ra khỏi màn hình
           if (newY < -100) {
@@ -98,13 +105,13 @@ const Balloon = ({ id, color, onPop, network, bubbleType, icon }) => {
           // Tắt hoàn toàn chuyển động ngang cho iOS
           if (isIOS) {
             return {
-              x: prev.x,
+              x: prev.x, // Giữ nguyên vị trí X
               y: newY,
             };
           }
 
-          // Giảm chuyển động ngang cho Android
-          const waveX = Math.sin(currentTime * 0.001) * 1;
+          // Chuyển động ngang nhẹ cho Android
+          const waveX = Math.sin(elapsed * 0.002) * 2;
           const newX = prev.x + waveX * 0.01;
 
           return {
@@ -244,7 +251,7 @@ export default function App() {
     "#98D8C8",
   ];
 
-  // const contents = ["🎈", "🎉", "🎊", "🎁", "./tam.jpg", "tam2.jpg"]; // Giảm số lượng emoji, thêm image từ public/images
+  // const contents = ["🎈", "🎉", "��", "🎁", "./tam.jpg", "tam2.jpg"]; // Giảm số lượng emoji, thêm image từ public/images
   // const points = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   let audio = new Audio(
     "https://soundbible.com/mp3/Balloon%20Popping-SoundBible.com-1247261379.mp3"
