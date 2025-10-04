@@ -34,6 +34,8 @@ const initUser = async (deviceId) => {
     localStorage.setItem("deviceId", deviceId);
     return data;
   } catch (error) {
+    localStorage.setItem("deviceId", deviceId);
+
     console.log("🚀 ~ initUser ~ error:", error);
   }
 };
