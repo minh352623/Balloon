@@ -263,28 +263,44 @@ button:hover {
   }
 }
 
-/* Component hiển thị điểm số đơn giản */
-.simple-points-display {
-  background: rgba(0, 0, 0, 0.8);
-  color: #00ff88;
-  padding: 12px 24px;
-  border-radius: 25px;
-  border: 2px solid #00ff88;
-  text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
-  animation: simpleBounce 1s ease-out;
+/* Component hiển thị điểm số nhỏ gọn */
+.compact-points-display {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  pointer-events: none;
+  animation: compactBounce 0.8s ease-out;
+  max-width: 100px;
 }
 
-@keyframes simpleBounce {
+.compact-points-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #00ff88;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px 8px;
+  border-radius: 12px;
+  border: 1px solid #00ff88;
+  text-shadow: 0 0 6px rgba(0, 255, 136, 0.5);
+  display: inline-block;
+  min-width: auto;
+  max-width: 100px;
+  width: auto;
+}
+
+@keyframes compactBounce {
   0% {
-    transform: scale(0.5);
+    transform: translate(-50%, -50%) scale(0.3);
     opacity: 0;
   }
   50% {
-    transform: scale(1.1);
+    transform: translate(-50%, -50%) scale(1.2);
     opacity: 1;
   }
   100% {
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
 }

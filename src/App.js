@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import { Centrifuge } from "centrifuge";
 import { tapBalloon, initUser, getToken, getPoints } from "./api";
 
-// Component hiển thị điểm số với animation - đơn giản hóa
+// Component hiển thị điểm số với animation - nhỏ gọn
 const PointsDisplay = ({ points, isVisible, onAnimationEnd }) => {
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
         onAnimationEnd();
-      }, 1000); // Giảm thời gian hiển thị
+      }, 300); // Giảm thời gian hiển thị
       return () => clearTimeout(timer);
     }
   }, [isVisible, onAnimationEnd]);
@@ -17,12 +17,8 @@ const PointsDisplay = ({ points, isVisible, onAnimationEnd }) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
-      <div className="simple-points-display">
-        <div className="text-center">
-          <div className="text-3xl font-bold">+{points}</div>
-        </div>
-      </div>
+    <div className="compact-points-display">
+      <span className="compact-points-text">+{points}</span>
     </div>
   );
 };
@@ -356,7 +352,7 @@ export default function App() {
               if (item.type == "survey")
                 addMoreBalloons(item.icon, item.key, item.type);
               else addMoreBalloons(item.icon, item.key, item.type);
-            }, index * 800); // Delay 200ms giữa mỗi bóng bay
+            }, index * 1000); // Delay 200ms giữa mỗi bóng bay
           });
         }
       })
