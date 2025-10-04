@@ -291,9 +291,9 @@ export default function App() {
     //   setLastPointsEarned(pointsEarned);
     //   setShowPointsAnimation(true);
     // }
-    if (isSound) {
-      tapBalloon(network, bubbleType);
+    tapBalloon(network, bubbleType);
 
+    if (isSound) {
       audio.play();
     }
   };
